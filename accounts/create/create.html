@@ -4,8 +4,91 @@
         <link rel="stylesheet" href="./create.css">
     </head>
     <body>
-        <div id="test">
-            <h1>CREATE ACCOUNT</h1>
+        <div id="color">
+            <h1><i>Getting to know you</i></h1><br>
+        </div>
+        <div id="container">
+            <form id="form">
+                <h2>Tell us about yourself</h2>
+                <label for="fname">First Name</label><br>
+                <input type="text" name="fname" id="fname" size="20"><br>
+                <label for="lname">Last Name</label><br>
+                <input type="text" name="lname" id="lname" size="30"><br>
+                <h2>Let's get in touch</h2>
+                <label for="email">Email</label><br>
+                <input type="text" name="email" id="email" size="35"><br>
+                <label for="emailConf">Confirm Email</label><br>
+                <input type="text" name="emailConf" id="emailConf" size="35"><br>
+                <h2>We'll make sure it's you</h2>
+                <label for="password">Password</label><br>
+                <input type="text" name="password" id="password" size="15"><br>
+                <label for="passwordConf">Confirm Password</label><br>
+                <input type="text" name="passwordConf" id="passwordConf" size="15"><br>
+                <h2>Where should we start you off?</h2>
+                <label for="address">Street Address</label><br>
+                <input type="text" name="address" id="address" size="40"><br>
+                <label for="city">City</label><br>
+                <input type="text" name="city" id="city" size="10"><br>
+                <label for="state">State</label><br>
+                <input list="states" name="state" id="state" size="6"><br>
+                <datalist id="states">
+                    <option value="AL">Alabama</option>
+                    <option value="AK">Alaska</option>
+                    <option value="AZ">Arizona</option>
+                    <option value="AR">Arkansas</option>
+                    <option value="CA">California</option>
+                    <option value="CO">Colorado</option>
+                    <option value="CT">Connecticut</option>
+                    <option value="DE">Delaware</option>
+                    <option value="DC">District Of Columbia</option>
+                    <option value="FL">Florida</option>
+                    <option value="GA">Georgia</option>
+                    <option value="HI">Hawaii</option>
+                    <option value="ID">Idaho</option>
+                    <option value="IL">Illinois</option>
+                    <option value="IN">Indiana</option>
+                    <option value="IA">Iowa</option>
+                    <option value="KS">Kansas</option>
+                    <option value="KY">Kentucky</option>
+                    <option value="LA">Louisiana</option>
+                    <option value="ME">Maine</option>
+                    <option value="MD">Maryland</option>
+                    <option value="MA">Massachusetts</option>
+                    <option value="MI">Michigan</option>
+                    <option value="MN">Minnesota</option>
+                    <option value="MS">Mississippi</option>
+                    <option value="MO">Missouri</option>
+                    <option value="MT">Montana</option>
+                    <option value="NE">Nebraska</option>
+                    <option value="NV">Nevada</option>
+                    <option value="NH">New Hampshire</option>
+                    <option value="NJ">New Jersey</option>
+                    <option value="NM">New Mexico</option>
+                    <option value="NY">New York</option>
+                    <option value="NC">North Carolina</option>
+                    <option value="ND">North Dakota</option>
+                    <option value="OH">Ohio</option>
+                    <option value="OK">Oklahoma</option>
+                    <option value="OR">Oregon</option>
+                    <option value="PA">Pennsylvania</option>
+                    <option value="RI">Rhode Island</option>
+                    <option value="SC">South Carolina</option>
+                    <option value="SD">South Dakota</option>
+                    <option value="TN">Tennessee</option>
+                    <option value="TX">Texas</option>
+                    <option value="UT">Utah</option>
+                    <option value="VT">Vermont</option>
+                    <option value="VA">Virginia</option>
+                    <option value="WA">Washington</option>
+                    <option value="WV">West Virginia</option>
+                    <option value="WI">Wisconsin</option>
+                    <option value="WY">Wyoming</option>
+                </datalist>
+                <label for="zipcode">Zipcode</label><br>
+                <input type="text" name="zipcode" id="zipcode" size="7"><br>
+                <br>
+                <input type="submit" id="submit" value="Submit">
+            </form>
         </div>
     </body>
 </html>

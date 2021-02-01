@@ -1,11 +1,71 @@
 body {
-    background-color: rgb(214, 255, 221);
+    background-color: rgb(255, 255, 255);
     display: grid;
-    grid-template-columns: 1fr minmax(500px, 700px) 1fr;
+    grid-template-columns: 1fr 500px 1fr;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
 }
 
+#color{
+    grid-column: 1/4;
+    background-color: rgb(49, 158, 49);
+    height: 125px;
+    width: 100%;
+}
 
-#test {
+#color h1 {
+    color: white;
+    text-align: center;
+    width: 700px;
+    margin: 0;
+    padding: 25px;
+    padding-top: 30px;
+    position: relative;
+    left: calc(50% - 375px);
+    text-align: center;
+    font-size: 50px;
+}
+
+#container {
+    border-radius: 5px;
     grid-column: 2;
+    padding: 50px;
+    margin: 0;
+    padding-top: 0px;
+}
+
+input{
+    margin-bottom: 10px;
+    margin-top: 2px;
+    border-radius: 0px;
+    border-width: 0;
+    outline: none;
+    background-color: rgb(224, 224, 224);
+    transition-duration: 100ms;
+    height: 20px;
+    font-size: 15px;
+}
+
+input:hover {
+    border-bottom-width: 2px;
+    transition-duration: 100ms;
+}
+
+input:focus {
+    border-bottom-width: 2px;
+    transition-duration: 100ms;
+}
+
+#submit {
+    height: 30px;
+    width: 80px;
+    background-color: rgb(51, 190, 58);
+    transition-duration: 300ms;
+}
+
+#submit:hover {
+    color: white;
+    transition-duration: 300ms;
+    border-width: 0;
 }
