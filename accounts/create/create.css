@@ -1,0 +1,11 @@
+body {
+    background-color: rgb(214, 255, 221);
+    display: grid;
+    grid-template-columns: 1fr minmax(500px, 700px) 1fr;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+
+#test {
+    grid-column: 2;
+}
