@@ -59,7 +59,7 @@ input:focus {
 
 #submit {
     height: 30px;
-    width: 80px;
+    width: 100px;
     background-color: rgb(51, 190, 58);
     transition-duration: 300ms;
 }

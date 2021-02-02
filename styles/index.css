@@ -30,7 +30,7 @@ html, body {
   list-style-type: none;
   margin: 0;
   padding: 0;
-  padding-top: 5px;
+  padding-top: 10px;
   line-height: 30px;
   text-align: center;
 }
@@ -52,8 +52,12 @@ html, body {
   text-decoration: none;
 }
 
+.account .dropdown--animated li {
+  transition-duration: 200ms;
+}
 
 .account .dropdown--animated li:hover {
+  transition-duration: 200ms;
   text-decoration: underline;
 }
 
