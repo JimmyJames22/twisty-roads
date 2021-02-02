@@ -22,7 +22,7 @@ let locationNum;
 let loadingPhrases = ["Why are there fun runs but no fun drives?", "Drive like the F1 driver you know you are (at the speed limit of course)", "Go somewhere you've never gone before", "How about a family road trip?", "Are we there yet?", ]
 
 let key = "AIzaSyDrZ-lEzCYDJRXJc6RxAjcyxK_JSfQpEIw";
-let header = "http://localhost:8000/";
+let header = "http://24.60.153.154:8080/";
 
 let elevData = [];
 
