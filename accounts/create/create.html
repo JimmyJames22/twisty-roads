@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <title>Sign Up</title>
         <link rel="stylesheet" href="./create.css">
     </head>
     <body>
@@ -8,25 +9,28 @@
             <h1><i>Getting to know you</i></h1><br>
         </div>
         <div id="container">
-            <form id="form">
+            <form action="./create.php" id="form">
                 <h2>Tell us about yourself</h2>
                 <label for="fname">First Name</label><br>
-                <input type="text" name="fname" id="fname" size="20"><br>
+                <input type="text" name="fname" id="fname" size="20" required><br>
                 <label for="lname">Last Name</label><br>
-                <input type="text" name="lname" id="lname" size="30"><br>
-                <h2>Let's get in touch</h2>
+                <input type="text" name="lname" id="lname" size="30" required><br>
+                <h2 id="contact">Let's get in touch</h2>
+                <h5>We need these credentials to give you the best experience possible and will never contact you without your permission.</h5>
                 <label for="email">Email</label><br>
                 <input type="text" name="email" id="email" size="35"><br>
                 <label for="emailConf">Confirm Email</label><br>
                 <input type="text" name="emailConf" id="emailConf" size="35"><br>
+                <label for="phone">Phone Number</label><br>
+                <input type="text" name="phone" id="phone"><br>
                 <h2>We'll make sure it's you</h2>
                 <label for="password">Password</label><br>
                 <input type="text" name="password" id="password" size="20"><br>
                 <label for="passwordConf">Confirm Password</label><br>
                 <input type="text" name="passwordConf" id="passwordConf" size="20"><br>
-                <h2>Where should we start you off?</h2>
+                <h2>Where should we start off?</h2>
                 <label for="address">Street Address</label><br>
-                <input type="text" name="address" id="address" size="40"><br>
+                <input type="text" name="address" id="address" size="35"><br>
                 <label for="city">City</label><br>
                 <input type="text" name="city" id="city" size="10"><br>
                 <label for="state">State</label><br>

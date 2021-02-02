@@ -1,7 +1,7 @@
 body {
     background-color: rgb(255, 255, 255);
     display: grid;
-    grid-template-columns: 1fr 500px 1fr;
+    grid-template-columns: 1fr 475px 1fr;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     margin: 0;
     padding: 0;
@@ -35,7 +35,7 @@ body {
     padding-top: 0px;
 }
 
-input{
+input {
     margin-bottom: 10px;
     margin-top: 2px;
     border-radius: 0px;
@@ -55,6 +55,16 @@ input:hover {
 input:focus {
     border-bottom-width: 2px;
     transition-duration: 100ms;
+}
+
+#contact {
+    margin-bottom: 5px;
+}
+
+#form h5 {
+    margin-top: 0;
+    padding: 0;
+    color:rgba(0, 0, 0, 0.5);
 }
 
 #submit {
