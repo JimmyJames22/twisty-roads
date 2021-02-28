@@ -1,12 +1,17 @@
+<?php
+    session_start();
+?>
+
 <!DOCTYPE html>
 <head>
     <title>Your Account</title>
     <link rel="stylesheet" href="./accounts.css">
     <?php
-        $clientid = $_GET["clientid"];
-        if(!$clientid) {
+        if(!isset($_SESSION["clientid"])){
             header("Location: ./login");
         }
+
+        $clientid = $_SESSION["clientid"];
 
         $servername = "localhost:3306";
         $username = "root";
@@ -22,7 +27,7 @@
 
         mysqli_select_db($conn, 'users');
         
-        $getUsers = "SELECT * FROM userlist WHERE clientid='$clientid'";
+        $getUsers = "SELECT * FROM userlist INNER JOIN useraddresses ON userlist.clientid = useraddresses.clientid";
         $userResult = mysqli_query($conn, $getUsers);
 
         $fname;
@@ -31,6 +36,9 @@
         $phone;
 
         while($row = mysqli_fetch_assoc($userResult)) {
+            print_r($row);
+            echo("<br>");
+            echo("<br>");
             global $fname, $lname, $email, $phone, $homeAddress, $workAddress;
             $fname = $row["firstname"];
             $lname = $row["lastname"];
@@ -38,17 +46,15 @@
             $phone = $row["phone"];
         }
 
-        mysqli_select_db($conn, 'addresses');
+        // $getPlaces = "SELECT * FROM `$clientid`";
+        // $placesResult = mysqli_query($conn, $getPlaces);
+        // $places = array();
 
-        $getPlaces = "SELECT * FROM `$clientid`";
-        $placesResult = mysqli_query($conn, $getPlaces);
-        $places = array();
-
-        while($row = mysqli_fetch_assoc($placesResult)){
-            global $places;
-            $place = array($row["name"], $row["address"]);
-            $places = array_merge($places, $place);
-        }
+        // while($row = mysqli_fetch_assoc($placesResult)){
+        //     global $places;
+        //     $place = array($row["name"], $row["address"]);
+        //     $places = array_merge($places, $place);
+        // }
     ?>
 </head>
 <body>

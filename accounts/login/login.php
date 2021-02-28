@@ -1,4 +1,6 @@
 <?php
+    session_start();
+
     $email = htmlspecialchars($_GET["email"]);
     $password = htmlspecialchars($_GET["password"]);
 
@@ -29,8 +31,8 @@
                 $params = array(
                     'clientid' => $row["clientid"]
                 );
-                $data = http_build_query($params);
-                header('Location: ../?' . $data);
+                $_SESSION["clientid"] = $row["clientid"]
+                header('Location: ../');
                 break;
             } else {
                 $params = array {

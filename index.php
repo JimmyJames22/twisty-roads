@@ -16,15 +16,11 @@
       <div class="account">
         Account
         <ul class="dropdown-menu dropdown dropdown--animated">
-          <?php if(isset($_GET["clientid"])){
+          <?php if(isset($_SESSION["clientid"])){
             global $clientid;
-            $clientid = $_GET["clientid"];
-            $params = array(
-              'clientid' => $clientid
-            );
-            $data = http_build_query($params);
+            $clientid = $_SESSION["clientid"];
           ?>
-            <li><a href="./accounts?<?php echo($data); ?>">Account Info</a></li>
+            <li><a href="./accounts">Account Info</a></li>
             <li><a href="./">Sign Out</a></li>
           <?php } else { ?>
             <li><a href="./accounts/login">Sign In</a></li>

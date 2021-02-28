@@ -1,4 +1,6 @@
 <?php
+	session_start();
+
     $firstname = $_GET["fname"];
     $lastname = $_GET["lname"];
     $email = $_GET["email"];
@@ -99,6 +101,8 @@
     } else {
         echo "FAILED TO ADD ADDRESS <br>" . mysqli_error($conn);
 	}
+
+	$_SESSION["clientid"] = $clientid;
 
 	$conn->close();
 	header('Location: ../account-made');
