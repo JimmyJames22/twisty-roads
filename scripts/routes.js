@@ -26,7 +26,11 @@ let header = "http://24.60.153.154:8080/";
 
 let elevData = [];
 
+console.log("f");
+
 function init(){
+  console.log("H")
+  console.log(window.state)
   origin = document.getElementById('origin');
   dest = document.getElementById('dest');
   originIn = document.getElementById('originInput');
@@ -307,7 +311,7 @@ function takeRoutingInput(){
   document.getElementById("nav").style.backgroundColor = "rgba(37, 173, 32, 0.767)";
   document.getElementById("nav").disabled = true;
   document.getElementById('loading').style.opacity = "1";
-  url = `${header}https://maps.googleapis.com/maps/api/directions/json?origin=${originId}&destination=${destId}&alternatives=true&key=${key}`
+  url = `${header}https://maps.googleapis.com/maps/api/directions/json?origin=${originId}&destination=${destId}&alternatives=true&avoid=tolls|highways|ferries&key=${key}`
   getJSON(url, (err, data) => {
   console.log(data);
     for(let i=0; i<data.routes.length; i++){
@@ -321,9 +325,7 @@ function takeRoutingInput(){
       document.getElementById('arrow').style.opacity = "1";
       document.getElementById('body').classList.add("done");
     }
-    console.log("yooo")
     orderRoutes();
-    console.log("hiii")
     drawRoutes();
   });
 }
@@ -338,11 +340,11 @@ function initMap() {
 
 class route {
   constructor(routeData){
-    console.log("rd")
-    console.log(routeData)
     this.routeData = routeData;
-    this.num = 0;
-    this.dist;
+    this.elevNum = 0;
+    this.distNum;
+    this.elevCoords = [];
+    this.path;
     this.rating;
     this.elevSum = 0;
     this.aveElev; //bigger better
@@ -355,40 +357,50 @@ class route {
   }
 
   analyze(data){
+    let elevQuery = [];
+
     for(let i=0; i<data.legs.length; i++){
-      let path = google.maps.geometry.encoding.decodePath(data.overview_polyline.points);
-      let point = new google.maps.LatLng(path);
-      console.log("A*EHFWAH(*EF" + point)
-      // for(let x=0; x<path.length; x++){
-      //   console.log(path[x])
-      //   console.log("P" + point.lat())
-      //   console.log("P" + point.lng())
-      //   console.log("P" + path)
-      // }
       for(let j=0; j<data.legs[i].steps.length; j++){
-        this.elevData(data.legs[i].steps[j]);
+        let path = google.maps.geometry.encoding.decodePath(data.legs[i].steps[j].polyline.points);
+        elevCoords = elevCoords.concat(path);
         this.distance(data.legs[i].steps[j], data.legs[i].steps[j].start_location, data.legs[i].steps[j].end_location);
-        this.num ++;
+        this.distNum ++;
       }
     }
-    this.aveElev = this.elevSum/this.num;
-    this.aveDist = this.distSum/this.num;
+
+    let done = false;
+    let x=0;
+
+    while(!done){
+      let q = "";
+      for(let y=0; y<512; y++){
+        this.elevNum ++;
+        if(x+y == elevCoords.length-1){
+          done = true;
+          break;
+        }
+        if(y==0){
+          q += `${elevCoords[(x+y)].lat()},${elevCoords[(x+y)].lng()}`
+        } else {
+          q += `|${elevCoords[(x+y)].lat()},${elevCoords[(x+y)].lng()}`
+        }
+      }
+      elevQuery.push(q);
+      x+=512;
+      if(done){
+        break;
+      }
+    }
+    
+    console.log("HELLOOOOOO");
+    this.elevData(elevQuery);
+    this.aveElev = this.elevSum/this.elevNum;
+    this.aveDist = this.distSum/this.distNum;
     console.log("elevSum " + this.elevSum);
     console.log("distSum " + this.distSum);
     console.log("num " + this.num);
     console.log("aveElev " + this.aveElev);
     this.rating = this.aveDist + this.aveElev/2;
-  }
-
-  elevData(step) {
-    let loc1 = step.start_location;
-    let loc2 = step.end_location;
-    let url = `${header}https://maps.googleapis.com/maps/api/elevation/json?locations=${loc1.lat},${loc1.lng}|${loc2.lat},${loc2.lng}&key=${key}`
-    getJSONSync(url, (err, data) => {
-      let ele1 = data.results[0].elevation;
-      let ele2 = data.results[1].elevation;
-      this.elevSum += Math.abs(ele1-ele2);
-    });
   }
 
   distance(step, loc1, loc2) {
@@ -413,6 +425,28 @@ class route {
     let distAct = step.distance.value * 0.0006213712;
     this.dist += distAct;
     this.distSum += distAct/distStr;
+  }
+
+  elevData(elevData) {
+    let elevResponse = [];
+    for(let x=0; x<elevData.length; x++){
+      console.log(elevData[x]);
+      let url = `${header}https://maps.googleapis.com/maps/api/elevation/json?locations=${elevData[x]}&key=${key}`;
+      console.log("url " + url);
+      getJSON (url, (err, data) => {
+        console.log("HIIIIIIIIIIIII")
+        console.log(data);
+        elevResponse = elevResponse.concat(data.results);
+        this.crunch();
+        if(elevData.length == this.elevCoords.length){
+          console.log("DONEEE");
+          console.log(elevResponse);
+        }
+      });
+    }
+  }
+  crunch(){
+
   }
 }
 
@@ -470,7 +504,6 @@ function drawRoutes(){
     if(routes[i].isMostFun){
       color = '#ff5050';
     }
-    console.log(`Path ${google.maps.geometry.encoding.decodePath(routes[i].routeData.overview_polyline.points)}`);
     let line = new google.maps.Polyline({
       path: google.maps.geometry.encoding.decodePath(routes[i].routeData.overview_polyline.points),
       geodesic: true,

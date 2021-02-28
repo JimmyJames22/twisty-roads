@@ -1,22 +1,35 @@
+<?php
+  session_start();
+?>
+
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Twisty Roads</title>
+    <title>Twisty Rodes</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="styles/index.css"></link>
     <script src="scripts/routes.js" type="text/javascript"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-analytics.js"></script>
-    <script>
-      // Your web app's Firebase configuration
-      // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-    </script>
+    <?php
+      $clientid;
+    ?>
     <div id="navbar">
       <div class="account">
         Account
         <ul class="dropdown-menu dropdown dropdown--animated">
-          <li><a href="./accounts/login/login.html">Sign In</a></li>
-          <li><a href="./accounts/create/create.html">Create Account</a></li>
+          <?php if(isset($_GET["clientid"])){
+            global $clientid;
+            $clientid = $_GET["clientid"];
+            $params = array(
+              'clientid' => $clientid
+            );
+            $data = http_build_query($params);
+          ?>
+            <li><a href="./accounts?<?php echo($data); ?>">Account Info</a></li>
+            <li><a href="./">Sign Out</a></li>
+          <?php } else { ?>
+            <li><a href="./accounts/login">Sign In</a></li>
+            <li><a href="./accounts/create">Create Account</a></li>
+          <?php } ?>
         </ul>
       </div>
     </div>

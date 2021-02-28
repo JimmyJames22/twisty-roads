@@ -8,6 +8,7 @@
     <body>
         <div id="color">
             <h1><i>Getting to know you</i></h1><br>
+            <a href="../../"><img src="../../media/TR.png" id="tr"></a>
         </div>
         <div id="container">
             <form action="./create.php" id="form">
@@ -26,12 +27,13 @@
                 <input type="tel" name="phone" id="phone" required><br>
                 <h2>We'll make sure it's you</h2>
                 <label for="password">Password</label><br>
-                <input type="text" name="password" id="password" size="20" required><br>
+                <input type="password" name="password" id="password" size="20" required><br>
                 <label for="passwordConf">Confirm Password</label><br>
-                <input type="text" name="passwordConf" id="passwordConf" size="20" onfocusout="checkPassword(this)" required><br>
+                <input type="password" name="passwordConf" id="passwordConf" size="20" onfocusout="checkPassword(this)" required><br>
                 <h2>Where should we start off?</h2>
                 <label for="address">Address</label><br>
-                <input type="text" class="address" name="streetAddress" id="streetAddress" placeholder="Street Address" size="34"><br>
+                <input type="text" class="address" name="streetAddress1" id="streetAddress1" placeholder="Street Address 1" size="34"><br>
+                <input type="text" class="address" name="streetAddress2" id="streetAddress2" placeholder="Street Address 2" size="34"><br>
                 <input type="text" class="address" name="city" id="city" placeholder="City" size="15">
                 <input list="states" class="address" name="state" id="state" placeholder="State" maxlength="2" size="5"><br>
                 <datalist id="states">

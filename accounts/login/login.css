@@ -10,8 +10,15 @@ body {
 #color{
   grid-column: 1/4;
   background-color: rgb(49, 158, 49);
-  height: 125px;
+  height: 60px;
   width: 100%;
+}
+
+#tr {
+  position: absolute;
+  height: 50px;
+  width: 60px;
+  top: 5px;
 }
 
 #color h1 {
@@ -22,9 +29,10 @@ body {
   padding: 25px;
   padding-top: 30px;
   position: relative;
+  bottom: 20px;
   left: calc(50% - 375px);
   text-align: center;
-  font-size: 50px;
+  font-size: 35px;
 }
 
 #container {

@@ -1,11 +1,35 @@
 <?php
-    $firstname = htmlspecialchars($_GET["fname"]);
-    $lastname = htmlspecialchars($_GET["lname"]);
-    $email = htmlspecialchars($_GET["email"]);
-    $phone = htmlspecialchars($_GET["phone"]);
-    $password = htmlspecialchars($_GET["password"]);
-    $homeAddress = htmlspecialchars($_GET["streetAddress"]) . " " . htmlspecialchars($_GET["city"]) . ", " . htmlspecialchars($_GET["state"]) . " " . htmlspecialchars($_GET["zipcode"]);
-    echo($homeAddress);
+    $firstname = $_GET["fname"];
+    $lastname = $_GET["lname"];
+    $email = $_GET["email"];
+    $phone = $_GET["phone"];
+    $password = $_GET["password"];
+	$streetAddress1 = $_GET["streetAddress1"];
+	$streetAddress2 = $_GET["streetAddress2"];
+	$city = $_GET["city"];
+	$state = $_GET["state"];
+	$zipcode = $_GET["zipcode"];
+	
+	$clientid;
+    echo($firstname);
+	echo("<br>");
+	echo($lastname);
+	echo("<br>");
+    echo($email);
+	echo("<br>");
+	echo($phone);
+	echo("<br>");
+	echo($password);
+	echo("<br>");
+	echo($streetAddress1);
+	echo("<br>");
+	echo($streetAddress2);
+	echo("<br>");
+	echo($city);
+	echo("<br>");
+	echo($state);
+	echo("<br>");
+	echo($zipcode);
 
     $servername = "localhost:3306";
 	$username = "root";
@@ -22,41 +46,60 @@
 	}
 	echo "Connected successfully<br>";
 
-	//check if db users exists
-	if (mysqli_select_db($conn, 'users')) {
-		echo "Database exists<br>";
-	} else {
-		$sql = "CREATE DATABASE users";
-		if ($conn->query($sql) === TRUE) {
-		echo "Database created successfully<br>";
-		} else {
-		echo "Error creating database: " . $conn->error . "<br>";
-		}
-	}
-
 	mysqli_select_db($conn, 'users');
 
 	//check if table exists
 	// $test = mysqli_query($conn, 'select i from `userlist`');
-	if(mysqli_query($conn, "DESCRIBE `userlist`" )){
-		echo "TABLE EXISTS<br>";
+	if(mysqli_query($conn, "DESCRIBE `userlist`")){
+		echo "userlist TABLE EXISTS<br>";
 	} else {
-		$query = "CREATE TABLE userlist (firstname VARCHAR(30), lastname VARCHAR(30), email VARCHAR(70), phone VARCHAR(10), homeAddress VARCHAR(70), workAddress VARCHAR(70), clientid INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY)";
-		if($conn -> query($query) === TRUE){
-			echo "TABLE MADEE<br>";
-		} else {
-			echo "Error creating table: " . $conn.error . "<br>";
-		}
+		echo "userlist TABLE GONE OH NOOOO<br>";
     }
     
-    $makeUser = "INSERT INTO userlist (firstname, lastname, email, phone, homeAddress) VALUES ('$firstname', '$lastname', '$email', '$phone', '$homeAddress')";
+    $makeUser = "INSERT INTO userlist (firstname, lastname, email, phone) VALUES ('$firstname', '$lastname', '$email', '$phone')";
 
     if(mysqli_query($conn, $makeUser)) {
-        echo "User added";
+        echo "User added <br>";
     } else {
-        echo "FAILED TO ADD USER <br>" . mysqli_error($conn);
+        echo "FAILED TO ADD USER in USERLIST <br>" . mysqli_error($conn);
+	}
+
+	$getId = "SELECT * FROM userlist WHERE email='$email'";
+    $result = mysqli_query($conn, $getId);
+
+    while($row = mysqli_fetch_assoc($result)) {
+		global $clientid;
+        $clientid = $row["clientid"];
+    }
+	
+	if(mysqli_query($conn, "DESCRIBE `userlogin`")){
+		echo "userlogin TABLE EXISTS<br>";
+	} else {
+		echo "userlogin TABLE GONE OH NOOOO<br>";
+    }
+	
+	$makeLogin = "INSERT INTO userlogin (email, password, clientid) VALUES ('$email', '$password', '$clientid')";
+
+	if(mysqli_query($conn, $makeLogin)) {
+        echo "Login added <br>";
+    } else {
+        echo "FAILED TO ADD LOGIN <br>" . mysqli_error($conn);
+	}
+
+	if(mysqli_query($conn, "DESCRIBE `useraddresses`")){
+		echo "useraddresses TABLE EXISTS<br>";
+	} else {
+		echo "useraddresses TABLE GONE OH NOOOO<br>";
     }
 
+	$makeAddress = "INSERT INTO useraddresses (description, streetAddress1, streetAddress2, city, state, zipcode, clientid) VALUES ('Home', '$streetAddress1', '$streetAddress2', '$city', '$state', '$zipcode', '$clientid')";
+
+	if(mysqli_query($conn, $makeAddress)){
+		echo "Address added <br>";
+    } else {
+        echo "FAILED TO ADD ADDRESS <br>" . mysqli_error($conn);
+	}
+
 	$conn->close();
-	header('Location: ../accountMade.html');
+	header('Location: ../account-made');
 ?>
