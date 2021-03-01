@@ -34,17 +34,25 @@
         $lname;
         $email;
         $phone;
-
+        $addresses = array();
+        $rowCounnter = 0;
         while($row = mysqli_fetch_assoc($userResult)) {
+            global $fname, $lname, $email, $phone, $addresses, $rowCounnter;
+
             print_r($row);
             echo("<br>");
             echo("<br>");
-            global $fname, $lname, $email, $phone, $homeAddress, $workAddress;
+
             $fname = $row["firstname"];
             $lname = $row["lastname"];
             $email = $row["email"];
             $phone = $row["phone"];
+            $address = array("description" => $row["description"], "streetAddress1" => $row["streetAddress1"], "streetAddress2" => $row["streetAddress2"], "city" => $row["city"], "state" => $row["state"], "zipcode" => $row["zipcode"]);
+            $addresses[$rowCounnter] = $address;
+            $rowCounnter ++;
         }
+
+        print_r($addresses);
 
         // $getPlaces = "SELECT * FROM `$clientid`";
         // $placesResult = mysqli_query($conn, $getPlaces);
@@ -72,23 +80,37 @@
             </div>
             <div class="info">
                 <h3 class="label">Email  </h3>
-                <h3 class="data" contenteditable="true"><?php echo $email; ?></h4>
+                <h3 class="data" contenteditable="true"><?php echo $email; ?></h3>
             </div>
             <div class="info">
                 <h3 class="label">Phone  </h3>
-                <h3 class="data"><?php echo $phone; ?></h4>
+                <h3 class="data" contenteditable="true"><?php echo $phone; ?></h3>
             </div>
         </div>
         <h2>Your Places</h2>
         <div id="places" class="infoblock">
             <?php 
                 $x=0;
-                while($x < (count($places)-1)/2){
-                    global $x;
+                foreach($addresses as $address) {
             ?>
             <div class="info">
-                <h3 class="label"><?php echo $places[2*$x]; ?></h3>
-                <h3 class="data"><?php echo $places[2*$x+1]; ?></h4>
+                <h3 class="label" contenteditable="true"><?php echo $address["description"]; ?></h3>
+                <br>
+                <h3 class="data" contenteditable="true" style="margin-left: 15px;"><?php echo $address["streetAddress1"]; ?></h3>
+                <br>
+                <?php
+                    if(strlen($address["streetAddress2"]) > 0){
+                ?>
+                <h3 class="data" contenteditable="true" style="margin-left: 15px;"><?php echo $address["streetAddress2"]; ?></h3>
+                <br>
+                <?php
+                    }
+                ?>
+                <h3 class="data" style="margin-right: 0; margin-left: 15px;" contenteditable="true"><?php echo $address["city"]; ?></h3>
+                <h3 class="data" style="margin-right: 0; margin-left: -5px;">, </h3>
+                <h3 class="data" style="margin-right: 0; margin-left: 0;" contenteditable="true"><?php echo $address["state"]; ?></h3>
+                <br>
+                <br>
             </div>
             <?php
                     $x++;
