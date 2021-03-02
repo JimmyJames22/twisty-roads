@@ -21,7 +21,7 @@
             $clientid = $_SESSION["clientid"];
           ?>
             <li><a href="./accounts">Account Info</a></li>
-            <li><a href="./">Sign Out</a></li>
+            <li><a href="./logout.php">Sign Out</a></li>
           <?php } else { ?>
             <li><a href="./accounts/login">Sign In</a></li>
             <li><a href="./accounts/create">Create Account</a></li>
