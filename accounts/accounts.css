@@ -70,3 +70,40 @@ body {
     margin-left: -5px;
     padding-left: 0;
 }
+
+#buttons {
+    position: relative;
+    left: calc(50% - 125px);
+    grid-column: 2;
+    display: grid;
+    gap: 10px;
+    width: 250px;
+    grid-template-columns: 120px 120px;
+}
+
+#buttons button {
+    border: 0;
+    height: 30px;
+    width: 120px;
+    background-color: rgb(51, 190, 58);
+    transition-duration: 300ms;
+}
+  
+#buttons button:hover {
+    color: white;
+    transition-duration: 300ms;
+    border-width: 0;
+}
+
+#buttons button:disabled {
+    opacity: 0.5;
+    color: black;
+}
+
+#save {
+    grid-column: 1;
+}
+
+#delete {
+    grid-column: 2;
+}
