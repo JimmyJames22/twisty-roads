@@ -73,37 +73,41 @@ body {
 
 #buttons {
     position: relative;
-    left: calc(50% - 125px);
+    left: calc(50% - 95px);
     grid-column: 2;
     display: grid;
     gap: 10px;
-    width: 250px;
-    grid-template-columns: 120px 120px;
+    width: 190px;
+    grid-template-columns: 60px 120px;
 }
 
-#buttons button {
+#buttons button, a {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+    text-align: center;
     border: 0;
     height: 30px;
-    width: 120px;
-    background-color: rgb(51, 190, 58);
     transition-duration: 300ms;
 }
   
-#buttons button:hover {
+#buttons button:hover, a:hover {
     color: white;
     transition-duration: 300ms;
     border-width: 0;
 }
 
-#buttons button:disabled {
-    opacity: 0.5;
-    color: black;
-}
-
 #save {
+    padding-top: 7px;
+    height: 23px;
+    font-size: 14px;
+    background-color: rgb(51, 190, 58);
+    width: 60px;
     grid-column: 1;
 }
 
 #delete {
+    background-color: rgb(190, 51, 51);
+    width: 120px;
     grid-column: 2;
 }

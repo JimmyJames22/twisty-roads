@@ -50,14 +50,9 @@
             $addresses[$rowCounnter] = $address;
             $rowCounnter ++;
         }
-
-        foreach($addresses as $key => $value){
-            $addressesCopy[$key] = $value;
-        }
-
     ?>
 </head>
-<body onload="addListeners()">
+<body>
     <div id="color">
         <h1><i>Hi, <?php echo $fname; ?></i></h1><br>
         <a href="../?clientid=<?php echo $clientid; ?>"><img src="../../media/TR.png" id="tr"></a>
@@ -67,16 +62,16 @@
         <div id="userinfo" class="infoblock">
             <div class="info">
                 <h3 class="label">Name  </h3>
-                <h3 class="data" id="fname" onkeypress="contentChanged()" contenteditable="true"><?php echo $fname;?></h3>
-                <h3 class="data" id="lname" onkeypress="contentChanged()" contenteditable="true"><?php echo $lname;?></h3>
+                <h3 class="data" id="fname"><?php echo $fname;?></h3>
+                <h3 class="data" id="lname"><?php echo $lname;?></h3>
             </div>
             <div class="info">
                 <h3 class="label">Email  </h3>
-                <h3 class="data" id="email" onkeypress="contentChanged()" contenteditable="true"><?php echo $email; ?></h3>
+                <h3 class="data" id="email"><?php echo $email; ?></h3>
             </div>
             <div class="info">
                 <h3 class="label">Phone  </h3>
-                <h3 class="data" id="phone" onkeypress="contentChanged()" contenteditable="true"><?php echo $phone; ?></h3>
+                <h3 class="data" id="phone"><?php echo $phone; ?></h3>
             </div>
         </div>
         <h2>Your Places</h2>
@@ -86,22 +81,22 @@
                 for($x=0; $x < count($addresses); $x++) {
             ?>
             <div class="info">
-                <h3 class="label" id="description" onkeypress="contentChanged()" contenteditable="true"><?php echo $addresses[$x]["description"]; ?></h3>
+                <h3 class="label" id="description"><?php echo $addresses[$x]["description"]; ?></h3>
                 <br>
-                <h3 class="data" id="streetAddress1" onkeypress="contentChanged()" contenteditable="true" style="margin-left: 15px;"><?php echo $addresses[$x]["streetAddress1"]; ?></h3>
+                <h3 class="data" id="streetAddress1" style="margin-left: 15px;"><?php echo $addresses[$x]["streetAddress1"]; ?></h3>
                 <br>
                 <?php
                     if(strlen($addresses[$x]["streetAddress2"]) > 0){
                 ?>
-                <h3 class="data" id="streetAddress2" onkeypress="contentChanged()" contenteditable="true" style="margin-left: 15px;"><?php echo $addresses[$x]["streetAddress2"]; ?></h3>
+                <h3 class="data" id="streetAddress2" style="margin-left: 15px;"><?php echo $addresses[$x]["streetAddress2"]; ?></h3>
                 <br>
                 <?php
                     }
                 ?>
                 
-                <h3 class="data" id="city" style="margin-right: 0; margin-left: 15px;" onkeypress="contentChanged()" contenteditable="true"><?php echo $addresses[$x]["city"]; ?></h3>
+                <h3 class="data" id="city" style="margin-right: 0; margin-left: 15px;"><?php echo $addresses[$x]["city"]; ?></h3>
                 <h3 class="data" style="margin-right: 0; margin-left: -5px;">, </h3>
-                <h3 class="data" id="state" style="margin-right: 0; margin-left: 0;" onkeypress="contentChanged()" contenteditable="true"><?php echo $addresses[$x]["state"]; ?></h3>
+                <h3 class="data" id="state" style="margin-right: 0; margin-left: 0;"><?php echo $addresses[$x]["state"]; ?></h3>
                 <br>
                 <br>
             </div>
@@ -111,8 +106,8 @@
         </div>
     </div>
     <span id="buttons">
-        <button id="save" disabled>Save Changes</button>
-        <button id="delete" style="background-color: rgb(190, 51, 51);">Delete Account</button>
+        <a id="save" href="./edit">Edit</a>
+        <button id="delete">Delete Account</button>
     </span>
     
     <?php 

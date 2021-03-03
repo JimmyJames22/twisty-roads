@@ -20,7 +20,7 @@
 
     mysqli_select_db($conn, 'users');
     
-    $getUsers = "SELECT * FROM userlist WHERE email='$email'";
+    $getUsers = "SELECT * FROM userlogin WHERE email='$email'";
     $result = mysqli_query($conn, $getUsers);
 
     if(mysqli_num_rows($result) > 0){
@@ -31,16 +31,16 @@
                 $params = array(
                     'clientid' => $row["clientid"]
                 );
-                $_SESSION["clientid"] = $row["clientid"]
+                $_SESSION["clientid"] = $row["clientid"];
                 header('Location: ../');
                 break;
             } else {
-                $params = array {
+                $params = array (
                     'email' => $row["email"],
                     'invalidpass' => true
-                }
+                );
                 $data = http_build_query($params);
-                header("Location: ./?email=$row['email']&invalidpass=true");
+                header("Location: ./?email=" . $row['email'] . "&invalidpass=true");
             }
         }
     } else {
