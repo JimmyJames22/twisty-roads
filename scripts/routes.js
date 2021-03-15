@@ -362,7 +362,7 @@ class route {
     for(let i=0; i<data.legs.length; i++){
       for(let j=0; j<data.legs[i].steps.length; j++){
         let path = google.maps.geometry.encoding.decodePath(data.legs[i].steps[j].polyline.points);
-        elevCoords = elevCoords.concat(path);
+        this.elevCoords = this.elevCoords.concat(path);
         this.distance(data.legs[i].steps[j], data.legs[i].steps[j].start_location, data.legs[i].steps[j].end_location);
         this.distNum ++;
       }
@@ -375,14 +375,14 @@ class route {
       let q = "";
       for(let y=0; y<512; y++){
         this.elevNum ++;
-        if(x+y == elevCoords.length-1){
+        if (x + y == this.elevCoords.length-1){
           done = true;
           break;
         }
         if(y==0){
-          q += `${elevCoords[(x+y)].lat()},${elevCoords[(x+y)].lng()}`
+          q += `${this.elevCoords[(x + y)].lat()},${this.elevCoords[(x+y)].lng()}`
         } else {
-          q += `|${elevCoords[(x+y)].lat()},${elevCoords[(x+y)].lng()}`
+          q += `|${this.elevCoords[(x + y)].lat()},${this.elevCoords[(x+y)].lng()}`
         }
       }
       elevQuery.push(q);
@@ -393,7 +393,7 @@ class route {
     }
     
     console.log("HELLOOOOOO");
-    this.elevData(elevQuery);
+    this.elevData(this.eelevQuery);
     this.aveElev = this.elevSum/this.elevNum;
     this.aveDist = this.distSum/this.distNum;
     console.log("elevSum " + this.elevSum);
