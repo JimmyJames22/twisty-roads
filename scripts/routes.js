@@ -350,6 +350,7 @@ class route {
     this.aveElev; //bigger better
     this.distSum = 0;
     this.aveDist; //bigger better
+    this.doneElevData = false;
     this.analyze(routeData);
     this.isMostFun = false;
     this.isLongest = false;
@@ -393,14 +394,22 @@ class route {
     }
     
     console.log("HELLOOOOOO");
-    this.elevData(this.eelevQuery);
-    this.aveElev = this.elevSum/this.elevNum;
-    this.aveDist = this.distSum/this.distNum;
+
+    this.elevData(elevQuery);
+  }
+
+  crunch(elevResponse){
+    console.log(elevResponse)
+    for(let x=0; x<elevResponse.length; x++){
+      this.elevSum += elevResponse[x].elevation
+    }
+    this.aveElev = this.elevSum / this.elevNum;
+    this.aveDist = this.distSum / this.distNum;
     console.log("elevSum " + this.elevSum);
     console.log("distSum " + this.distSum);
-    console.log("num " + this.num);
+    console.log("num " + this.elevNum);
     console.log("aveElev " + this.aveElev);
-    this.rating = this.aveDist + this.aveElev/2;
+    this.rating = this.aveDist + this.aveElev / 2;
   }
 
   distance(step, loc1, loc2) {
@@ -429,24 +438,36 @@ class route {
 
   elevData(elevData) {
     let elevResponse = [];
-    for(let x=0; x<elevData.length; x++){
-      console.log(elevData[x]);
-      let url = `${header}https://maps.googleapis.com/maps/api/elevation/json?locations=${elevData[x]}&key=${key}`;
-      console.log("url " + url);
-      getJSON (url, (err, data) => {
-        console.log("HIIIIIIIIIIIII")
-        console.log(data);
-        elevResponse = elevResponse.concat(data.results);
-        this.crunch();
-        if(elevData.length == this.elevCoords.length){
-          console.log("DONEEE");
-          console.log(elevResponse);
+    this.doneElevData = false;
+    let elevProm = new Promise(
+      function(resolve, reject){
+        for (let x = 0; x < elevData.length; x++) {
+          console.log(elevData[x]);
+          let url = `${header}https://maps.googleapis.com/maps/api/elevation/json?locations=${elevData[x]}&key=${key}`;
+          console.log("url " + url);
+          getJSON(url, (err, data) => {
+            if(err){
+              reject(err);
+            }
+            console.log("HIIIIIIIIIIIII");
+            console.log(data)
+            elevResponse = elevResponse.concat(data.results);
+            console.log(elevResponse)
+            if (x == elevData.length - 1) {
+              resolve(elevResponse);
+            }
+          });
         }
-      });
-    }
-  }
-  crunch(){
-
+      }
+    )
+    elevProm.then(
+      (elevResponse) => {
+        console.log("CRUNCH")
+        this.crunch(elevResponse)
+      }, 
+      (err) => {
+        alert(err)
+    })
   }
 }
 
