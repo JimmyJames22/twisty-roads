@@ -17,9 +17,10 @@
 
         $servername = "localhost:3306";
         $username = "root";
+        $password = "teachmeSQL";
 
         // Create connection
-        $conn = new mysqli($servername, $username);
+        $conn = new mysqli($servername, $username, $password);
         // when there is a password, do $conn = mysqli_connect($servername, $username, $password);	$conn = mysqli_connect($servername, $username);
 
         // Check connection

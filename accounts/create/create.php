@@ -33,14 +33,13 @@
 	echo("<br>");
 	echo($zipcode);
 
-    $servername = "localhost:3306";
+  $servername = "localhost:3306";
 	$username = "root";
-	//$servpassword = "your_password";
+	$password = "teachmeSQL";
 
 	// Create connection
-	$conn = new mysqli($servername, $username);
+	$conn = new mysqli($servername, $username, $password);
 	// when there is a password, do $conn = mysqli_connect($servername, $username, $password);	$conn = mysqli_connect($servername, $username);
-
 
 	// Check connection
 	if (!$conn) {
@@ -105,5 +104,5 @@
 	$_SESSION["clientid"] = $clientid;
 
 	$conn->close();
-	header('Location: ../account-made');
+	header('Location: ../..');
 ?>
