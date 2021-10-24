@@ -28,7 +28,7 @@ let loadingPhrases = [
 ];
 
 let key = "AIzaSyDrZ-lEzCYDJRXJc6RxAjcyxK_JSfQpEIw";
-let header = "";
+let header = "http://24.60.153.154:8080/";
 
 let elevData = [];
 
@@ -82,11 +82,6 @@ function getJSON(url, callback) {
     type: "GET",
     dataType: "json",
     url: url,
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Headers": "origin, x-requested-with, content-type",
-      "Access-Control-Allow-Methods": "PUT, GET, POST, DELETE, OPTIONS, HEAD",
-    },
   })
     .done(function (data) {
       callback(null, data);
@@ -101,11 +96,6 @@ function getJSONSync(url, callback) {
     type: "GET",
     dataType: "json",
     url: url,
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Headers": "origin, x-requested-with, content-type",
-      "Access-Control-Allow-Methods": "PUT, GET, POST, DELETE, OPTIONS, HEAD",
-    },
     async: false,
     timeout: 3000,
   })
