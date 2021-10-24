@@ -32,7 +32,7 @@
                     'clientid' => $row["clientid"]
                 );
                 $_SESSION["clientid"] = $row["clientid"];
-                header('Location: ../');
+                header('Location: ../..');
                 break;
             } else {
                 $params = array (
@@ -44,7 +44,7 @@
             }
         }
     } else {
-        header("Location: ./?invalidlogin=true");
+        header("Location: ./?invalidemail=true");
     }
 
     mysqli_close($conn);
