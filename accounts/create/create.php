@@ -13,11 +13,11 @@
 	$zipcode = $_GET["zipcode"];
 	
 	$clientid;
-    echo($firstname);
+  echo($firstname);
 	echo("<br>");
 	echo($lastname);
 	echo("<br>");
-    echo($email);
+  echo($email);
 	echo("<br>");
 	echo($phone);
 	echo("<br>");
@@ -104,5 +104,5 @@
 	$_SESSION["clientid"] = $clientid;
 
 	$conn->close();
-	header('Location: ../..');
+
 ?>
