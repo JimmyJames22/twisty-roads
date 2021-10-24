@@ -47,7 +47,7 @@
 	if(mysqli_query($conn, "DESCRIBE `userlist`")){
 		echo "userlist TABLE EXISTS<br>";
 	} else {
-		$query = "CREATE TABLE userlist (firstname VARCHAR(30), lastname VARCHAR(30), email VARCHAR(70), phone INT(10), clientid INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY)";
+		$query = "CREATE TABLE userlist (firstname VARCHAR(30), lastname VARCHAR(30), email VARCHAR(70), phone VARCHAR(12), clientid INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY)";
 		if($conn -> query($query) === TRUE){
 			echo "userlist TABLE MADEE<br>";
 		} else {
