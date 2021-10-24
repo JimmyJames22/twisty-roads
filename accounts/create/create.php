@@ -104,5 +104,6 @@
 	$_SESSION["clientid"] = $clientid;
 
 	$conn->close();
+  header('location: ../..');
 
 ?>
