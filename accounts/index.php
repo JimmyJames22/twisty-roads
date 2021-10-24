@@ -106,10 +106,6 @@
             ?>
         </div>
     </div>
-    <span id="buttons">
-        <a id="save" href="./edit">Edit</a>
-        <button id="delete">Delete Account</button>
-    </span>
     
     <?php 
     
