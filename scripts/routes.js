@@ -28,7 +28,7 @@ let loadingPhrases = [
 ];
 
 let key = "AIzaSyDrZ-lEzCYDJRXJc6RxAjcyxK_JSfQpEIw";
-let header = "https://24.60.153.154:8080/";
+let header = "http://localhost:8080/";
 
 let elevData = [];
 
