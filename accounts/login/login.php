@@ -1,16 +1,16 @@
 <?php
-    session_start();
+  session_start();
 
-    $email = htmlspecialchars($_GET["email"]);
-    $password = htmlspecialchars($_GET["password"]);
+  $email = htmlspecialchars($_GET["email"]);
+  $password = htmlspecialchars($_GET["password"]);
 
-    $servername = "localhost:3306";
+  $servername = "localhost:3306";
 	$username = "root";
+  $password = "teachmeSQL";
 
-    // Create connection
-	$conn = new mysqli($servername, $username);
+	// Create connection
+	$conn = new mysqli($servername, $username, $password);
 	// when there is a password, do $conn = mysqli_connect($servername, $username, $password);	$conn = mysqli_connect($servername, $username);
-
 
 	// Check connection
 	if (!$conn) {
@@ -32,7 +32,7 @@
                     'clientid' => $row["clientid"]
                 );
                 $_SESSION["clientid"] = $row["clientid"];
-                header('Location: ../');
+                header('Location: ../..');
                 break;
             } else {
                 $params = array (
@@ -44,7 +44,7 @@
             }
         }
     } else {
-        header("Location: ./?invalidlogin=true");
+        header("Location: ./?invalidemail=true");
     }
 
     mysqli_close($conn);

@@ -15,10 +15,10 @@
 	}
 	$servername = "localhost:3306";
 	$username = "root";
-	$password = "your_password";
+	$password = "teachmeSQL";
 
 	// Create connection
-	$conn = new mysqli($servername, $username);
+	$conn = new mysqli($servername, $username, $password);
 	// when there is a password, do $conn = mysqli_connect($servername, $username, $password);	$conn = mysqli_connect($servername, $username);
 
 
@@ -47,7 +47,7 @@
 	if(mysqli_query($conn, "DESCRIBE `userlist`")){
 		echo "userlist TABLE EXISTS<br>";
 	} else {
-		$query = "CREATE TABLE userlist (firstname VARCHAR(30), lastname VARCHAR(30), email VARCHAR(70), phone INT(10), clientid INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY)";
+		$query = "CREATE TABLE userlist (firstname VARCHAR(30), lastname VARCHAR(30), email VARCHAR(70), phone VARCHAR(12), clientid INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY)";
 		if($conn -> query($query) === TRUE){
 			echo "userlist TABLE MADEE<br>";
 		} else {
