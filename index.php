@@ -7,7 +7,9 @@
   <head>
     <title>Twisty Rodes</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     <link rel="stylesheet" href="styles/index.css"></link>
+    <link rel="icon" type="image/png" href="./media/TR.png"/>
     <script src="scripts/routes.js" type="text/javascript"></script>
     <?php
       $clientid;
@@ -45,27 +47,102 @@
         </div>
         <span class="routingIn" id="origin">
           <input type="text" class="routeInput ellipsis" id="originInput" style="width:100%;" placeholder="Origin" onkeypress="autoCompleteOrig()"/>
+          <div id="currentLocation" class="originIn location hidden ellipsis">Curent Location</div>
+          <div id="0" class="originIn location originAuto hidden ellipsis"></div>
+          <div id="1" class="originIn location originAuto hidden ellipsis"></div>
+          <div id="2" class="originIn location originAuto hidden ellipsis"></div>
+          <div id="3" class="originIn location originAuto hidden ellipsis"></div>
+          <div id="4" class="originIn location originAuto hidden ellipsis"></div>
         </span>
         <span class="routingIn" id="dest">
           <input type="text" class="routeInput ellipsis" id="destInput" style="width:100%;" placeholder="Destination" onkeypress="autoCompleteDest()"/>
+          <div id="0" class="destIn location destAuto hidden ellipsis"></div>
+          <div id="1" class="destIn location destAuto hidden ellipsis"></div>
+          <div id="2" class="destIn location destAuto hidden ellipsis"></div>
+          <div id="3" class="destIn location destAuto hidden ellipsis"></div>
+          <div id="4" class="destIn location destAuto hidden ellipsis"></div>
         </span>
         <button class="routingIn" id="nav" onclick="takeRoutingInput()" disabled>Take me!</button>
       </div>
     </div>
-    <div id="routes" class="routesHidden">
-      <div id="menu" class="routesHidden">
-        <div id="routeHolder"></div>
-      </div>
-      <div id="menuHider">
-        <h3 id="Route">Route</h3>
-        <img  src="./media/routes.png" onclick="changeMenuState()" draggable="false">
-        <h3 id="Menu">Menu</h3>
+    <div id="routes" class="routesShown">
+      <div id="menu" class="routesShown">
+        <div id="routeHolder">
+          <div class="route">
+            <div class="quickRouteInfo">
+              <h1 class="routeSummary ellipsis"></h1>
+              <span class="routeData">
+                <h3 class="routeDistance"></h3>
+                <h3> | </h3>
+                <h3 class="routeDuration"></h3>
+              </span>
+            </div>
+            <div class="elevWrapper">
+              <h3>Elevation Graph</h3>
+              <div class="elevGraph">
+                <canvas id="graph0Wrapper"></canvas>
+              </div>
+            </div>
+            <div class="stepWrapper hidden">
+              <h3>Route Steps</h3>
+              <div class="steps"></div>
+            </div>
+            <img class="routeArrow" src="./media/black-arrow-png-41944.png" draggable="false">
+          </div>
+          <div class="route">
+            <div class="quickRouteInfo">
+              <h1 class="routeSummary ellipsis"></h1>
+              <span class="routeData">
+                <h3 class="routeDistance"></h3>
+                <h3> | </h3>
+                <h3 class="routeDuration"></h3>
+              </span>
+            </div>
+            <div class="elevWrapper">
+              <h3>Elevation Graph</h3>
+              <div class="elevGraph">
+                <canvas id="graph1Wrapper"></canvas>
+              </div>
+            </div>
+            <div class="stepWrapper hidden">
+              <h3>Route Steps</h3>
+              <div class="steps"></div>
+            </div>
+            <img class="routeArrow" src="./media/black-arrow-png-41944.png" draggable="false">
+          </div>
+          <div class="route">
+            <div class="quickRouteInfo">
+              <h1 class="routeSummary ellipsis"></h1>
+              <span class="routeData">
+                <h3 class="routeDistance"></h3>
+                <h3> | </h3>
+                <h3 class="routeDuration"></h3>
+              </span>
+            </div>
+            <div class="elevWrapper">
+              <h3>Elevation Graph</h3>
+              <div class="elevGraph">
+                <canvas id="graph2Wrapper"></canvas>
+              </div>
+            </div>
+            <div class="stepWrapper hidden">
+              <h3>Route Steps</h3>
+              <div class="steps"></div>
+            </div>
+            <img class="routeArrow" src="./media/black-arrow-png-41944.png" draggable="false">
+          </div>
+        </div>
+        <div id="menuHider">
+          <h3 id="Route">Route</h3>
+          <img  src="./media/routes.png" onclick="changeMenuState()" draggable="false">
+          <h3 id="Menu">Menu</h3>
+        </div>
       </div>
       <div id="map"></div>
-      <script defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDrZ-lEzCYDJRXJc6RxAjcyxK_JSfQpEIw&libraries=geometry&callback=initMap">
-      </script>  
+        <script defer
+          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDrZ-lEzCYDJRXJc6RxAjcyxK_JSfQpEIw&libraries=geometry&callback=initMap">
+        </script>  
+      </div>
     </div>
-
   </body>
 </html>

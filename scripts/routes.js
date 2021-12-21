@@ -6,22 +6,29 @@ let destIn;
 let originLog = [];
 let destLog = [];
 
+let originPredictions = [];
+let destPredictions = [];
+
 let originStr;
 let destStr;
 let originId;
 let destId;
 
-let routeTaken = false;
+let routeTaken = true;
 
 let map;
 let routes = [];
 let lines = [];
 
+let routeArrows = [];
+let routeDivs = [];
+let stepWrappers = [];
+
 let locationNum;
 
 let loadingPhrases = [
   "Why are there fun runs but no fun drives?",
-  "Drive like the F1 driver you know you are (at the speed limit of course)",
+  "Drive like the F1 driver you know you are",
   "Go somewhere you've never gone before",
   "How about a family road trip?",
   "Are we there yet?",
@@ -41,24 +48,55 @@ function init() {
   dest = document.getElementById("dest");
   originIn = document.getElementById("originInput");
   destIn = document.getElementById("destInput");
-  origin.addEventListener("keyup", () => {
+  originPredictions = document.getElementsByClassName("originIn");
+  destPredictions = document.getElementsByClassName("destIn");
+  routeArrows = document.getElementsByClassName("routeArrow");
+  routeDivs = document.getElementsByClassName("route");
+  stepWrappers = document.getElementsByClassName("stepWrapper");
+
+  originIn.addEventListener("keyup", () => {
     autoCompleteOrig();
   });
   dest.addEventListener("keyup", (event) => {
     autoCompleteDest();
   });
-  origin.addEventListener("focusin", () => {
-    focusInput(false, origin);
+  originIn.addEventListener("focusin", () => {
+    focusInput(false);
   });
-  dest.addEventListener("focusin", () => {
-    focusInput(true, dest);
+  destIn.addEventListener("focusin", () => {
+    focusInput(true);
   });
-  origin.addEventListener("focusout", () => {
-    unfocusInput(origin);
+  originIn.addEventListener("focusout", () => {
+    unfocusInput(false);
   });
-  dest.addEventListener("focusout", () => {
-    unfocusInput(dest);
+  destIn.addEventListener("focusout", () => {
+    unfocusInput(true);
   });
+
+  for (let i = 0; i < originPredictions.length; i++) {
+    pred = originPredictions[i];
+    pred.addEventListener("mousedown", () => {
+      if (i == 0) {
+        predictionListeners(true, null, null);
+      } else {
+        predictionListeners(false, false, originLog[i - 1]);
+      }
+    });
+  }
+
+  for (let i = 0; i < destPredictions.length; i++) {
+    pred = destPredictions[i];
+    pred.addEventListener("mousedown", () => {
+      predictionListeners(false, true, destLog[i]);
+    });
+  }
+
+  for (let i = 0; i < routeArrows.length; i++) {
+    routeArrows[i].addEventListener("mousedown", () => {
+      changeRouteHighlight(i);
+    });
+  }
+
   document.addEventListener("scroll", function () {
     let offset = window.pageYOffset;
     if (offset < window.innerHeight * 0.8) {
@@ -129,23 +167,9 @@ function autoCompleteOrig() {
       alert(`Something went wrong ${err}`);
     } else {
       originLog = [];
-      let counter = 0;
       for (let j = 0; j < data.predictions.length; j++) {
         originLog.push(data.predictions[j]);
-        if (document.getElementsByClassName("originIn")[j + 1]) {
-          document.getElementsByClassName("originInText")[j + 1].textContent =
-            data.predictions[j].description;
-        } else {
-          let div = document.createElement("div");
-          div.id = j;
-          div.classList.add("originIn");
-          let el = document.createElement("h4");
-          el.id = j;
-          el.classList.add("autoComplete", "originInText");
-          stylePredictions(div, el, data.predictions, j, false);
-          document.getElementById("origin").appendChild(div);
-        }
-        counter++;
+        focusInput(false);
       }
     }
   });
@@ -162,64 +186,42 @@ function autoCompleteDest() {
       destLog = [];
       for (let j = 0; j < data.predictions.length; j++) {
         destLog.push(data.predictions[j]);
-        if (document.getElementsByClassName("destIn")[j]) {
-          document.getElementsByClassName("destInText")[j].textContent =
-            data.predictions[j].description;
-        } else {
-          let div = document.createElement("div");
-          div.id = j;
-          div.classList.add("destIn");
-          let el = document.createElement("h4");
-          el.id = j;
-          el.classList.add("autoComplete", "destInText");
-          stylePredictions(div, el, data.predictions, j, false);
-          document.getElementById("dest").appendChild(div);
-        }
+        focusInput(true);
       }
     }
   });
 }
 
-function focusInput(dest, ele) {
-  let log;
+function focusInput(dest) {
+  let log = "";
+  let locations = [];
   if (dest) {
+    console.log("DEST");
+    locations = document.getElementsByClassName("destAuto");
     log = destLog;
   } else {
+    document.getElementById("currentLocation").classList.remove("hidden");
+    locations = document.getElementsByClassName("originAuto");
     log = originLog;
-    let div = document.createElement("div");
-    div.id = "location";
-    div.classList.add("originIn");
-    div.classList.add("location");
-    let el = document.createElement("h4");
-    el.id = "locationText";
-    el.classList.add("autoComplete", "originInText");
-    stylePredictions(div, el, null, null, true);
-    div.style.gridRow = 2;
-    document.getElementById("origin").appendChild(div);
   }
+
   for (let j = 0; j < log.length; j++) {
-    let div = document.createElement("div");
-    div.id = j;
-    let el = document.createElement("h4");
-    el.id = j;
-    if (dest) {
-      el.classList.add("autoComplete", "destInText");
-      div.classList.add("destIn");
-    } else {
-      el.classList.add("autoComplete", "originInText");
-      div.classList.add("originIn");
-    }
-    stylePredictions(div, el, log, j, false);
-    ele.appendChild(div);
-    predictionListeners(div, el);
+    locations[j].classList.remove("hidden");
+    locations[j].textContent = log[j].description;
   }
 }
 
-function unfocusInput(ele) {
-  while (ele.childNodes[2]) {
-    ele.removeChild(ele.childNodes[2]);
+function unfocusInput(dest, ele) {
+  let locations;
+  if (dest) {
+    locations = document.getElementsByClassName("destIn");
+  } else {
+    locations = document.getElementsByClassName("originIn");
   }
-  checkStatus();
+
+  for (let x = 0; x < locations.length; x++) {
+    locations[x].classList.add("hidden");
+  }
 }
 
 function stylePredictions(div, el, data, j, currentLocation) {
@@ -252,51 +254,40 @@ function stylePredictions(div, el, data, j, currentLocation) {
   predictionListeners(div, currentLocation);
 }
 
-function predictionListeners(div, currentLocation) {
-  div.style.transitionDuration = "100ms";
-  div.addEventListener("mouseover", () => {
-    div.style.backgroundColor = "rgba(255, 100, 100, 0.65)";
-  });
-  div.addEventListener("mouseout", () => {
-    div.style.backgroundColor = "rgba(200, 200, 200, 0.8)";
-  });
-  div.addEventListener("mousedown", () => {
-    console.log("SUCCESS!!");
-    if (div.classList.contains("destIn")) {
-      console.log("dest");
-      destStr = destLog[div.id].description;
-      destIn.value = destStr;
-      destId = `place_id:${destLog[div.id].place_id}`;
-      console.log(destId);
-    } else if (div.classList.contains("originIn")) {
-      console.log("orig");
-      if (currentLocation) {
-        if (navigator.geolocation) {
-          originStr = "Current Location";
-          originIn.value = originStr;
-          navigator.geolocation.getCurrentPosition(
-            (position) => {
-              let lat = position.coords.latitude;
-              let lng = position.coords.longitude;
-              originId = `${lat},${lng}`;
-              console.log(originId);
-              checkStatus();
-            },
-            (err) => {
-              alert(err);
-            }
-          );
-        } else {
-          alert("browser does not support location services");
+function predictionListeners(currentLocation, dest, locationArr) {
+  if (currentLocation) {
+    if (navigator.geolocation) {
+      originStr = "Current Location";
+      originIn.value = originStr;
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          originId = `${position.coords.latitude},${position.coords.longitude}`;
+          console.log(originId);
+          checkStatus();
+        },
+        (err) => {
+          alert(err);
         }
-      } else {
-        originStr = originLog[div.id].description;
-        originIn.value = originStr;
-        originId = `place_id:${originLog[div.id].place_id}`;
-        console.log(originId);
-      }
+      );
+    } else {
+      alert(
+        "Your browser does not support location services, please enter a route manually."
+      );
     }
-  });
+    return;
+  }
+  if (dest) {
+    destStr = locationArr.description;
+    destIn.value = destStr;
+    destId = `place_id:${locationArr.place_id}`;
+    console.log(destId);
+  } else {
+    originStr = locationArr.description;
+    originIn.value = originStr;
+    originId = `place_id:${locationArr.place_id}`;
+    console.log(originId);
+  }
+  checkStatus();
 }
 
 function checkStatus() {
@@ -339,8 +330,6 @@ function takeRoutingInput() {
       document.getElementById("arrow").style.opacity = "1";
       document.getElementById("body").classList.add("done");
     }
-    orderRoutes();
-    drawRoutes();
   });
 }
 
@@ -361,14 +350,17 @@ class route {
     this.path;
     this.rating;
     this.elevSum = 0;
+    this.elevRespData = [];
     this.aveElev; //bigger better
     this.distSum = 0;
     this.aveDist; //bigger better
     this.doneElevData = false;
-    this.analyze(routeData);
     this.isMostFun = false;
     this.isLongest = false;
     this.isShortest = false;
+    this.steps = [];
+
+    this.analyze(routeData);
   }
 
   analyze(data) {
@@ -380,6 +372,7 @@ class route {
           data.legs[i].steps[j].polyline.points
         );
         this.elevCoords = this.elevCoords.concat(path);
+        this.steps.push(data.legs[i].steps[j]);
         this.distance(
           data.legs[i].steps[j],
           data.legs[i].steps[j].start_location,
@@ -387,6 +380,8 @@ class route {
         );
         this.distNum++;
       }
+      console.log("STEPS");
+      console.log(this.steps);
     }
 
     let done = false;
@@ -416,16 +411,16 @@ class route {
         break;
       }
     }
-
-    console.log("HELLOOOOOO");
-
     this.elevData(elevQuery);
   }
 
   crunch(elevResponse) {
     console.log(elevResponse);
+    let elev;
     for (let x = 0; x < elevResponse.length; x++) {
-      this.elevSum += elevResponse[x].elevation;
+      let elev = elevResponse[x].elevation;
+      this.elevRespData.push(Number(elev));
+      this.elevSum += elev;
     }
     this.aveElev = this.elevSum / this.elevNum;
     this.aveDist = this.distSum / this.distNum;
@@ -434,6 +429,9 @@ class route {
     console.log("num " + this.elevNum);
     console.log("aveElev " + this.aveElev);
     this.rating = this.aveDist + this.aveElev / 2;
+
+    orderRoutes();
+    drawRoutes();
   }
 
   distance(step, loc1, loc2) {
@@ -470,7 +468,7 @@ class route {
         console.log(elevData[x]);
         let url = `${header}https://maps.googleapis.com/maps/api/elevation/json?locations=${elevData[x]}&key=${key}`;
         console.log("url " + url);
-        getJSON(url, (err, data) => {
+        getJSONSync(url, (err, data) => {
           if (err) {
             reject(err);
           }
@@ -537,6 +535,7 @@ function orderRoutes() {
 }
 
 function drawRoutes() {
+  console.log(drawRoutes);
   let bounds = new google.maps.LatLngBounds();
   bounds.extend(routes[0].routeData.legs[0].start_location);
   bounds.extend(
@@ -564,75 +563,169 @@ function drawRoutes() {
     line.setMap(map);
     lines.push(line);
   }
+
+  let divs = document.getElementsByClassName("route");
+  let summaries = document.getElementsByClassName("routeSummary");
+  let distances = document.getElementsByClassName("routeDistance");
+  let durations = document.getElementsByClassName("routeDuration");
+  // let indexes = document.getElementsByClassName("routeIndex");
+  let steps = document.getElementsByClassName("steps");
+
   for (let i = 0; i < routes.length; i++) {
-    let div = document.createElement("div");
-    div.id = i;
-    div.classList.add("route");
-    if (routes[i].isMostFun) {
-      div.style.borderWidth = "3px";
-      div.style.borderColor = "red";
+    let route = routes[i];
+    let div = divs[i];
+    let summary = summaries[i];
+    let distance = distances[i];
+    let duration = durations[i];
+    // let index = indexes[i];
+    let step = steps[i];
+
+    if (route.isMostFun) {
+      div.classList.add("mostFun");
     }
-    let h3 = document.createElement("h3");
-    h3.classList.add("routeName");
-    h3.textContent = `Route ${i + 1}`;
-    h4 = [];
-    let dist = document.createElement("h4");
-    console.log(routes[i]);
-    dist.textContent = routes[i].routeData.legs[0].distance.text;
-    let dur = document.createElement("h4");
-    dur.textContent = routes[i].routeData.legs[0].duration.text;
-    styleMenuElements(div, h3, dist, dur, i);
-    div.appendChild(h3);
-    div.appendChild(dist);
-    div.appendChild(dur);
-    if (routes[i].isMostFun) {
-      let fun = document.createElement("h4");
-      fun.style.color = "rgb(255, 48, 48)";
-      fun.style.marginLeft = "15px";
-      fun.style.marginTop = "15px";
-      fun.style.marginBottom = "0px";
-      fun.textContent = "Most fun Route";
-      div.appendChild(fun);
+    if (route.isShortest) {
+      div.classList.add("shortest");
     }
-    if (routes[i].isShortest) {
-      let short = document.createElement("h4");
-      short.style.color = "rgba(37, 173, 32, 1)";
-      short.style.marginLeft = "15px";
-      if (routes[i].isMostFun) {
-        short.style.marginTop = "5px";
-      } else {
-        short.style.marginTop = "15px";
+    summary.textContent = route.routeData.summary;
+    distance.textContent = route.routeData.legs[0].distance.text;
+    duration.textContent = route.routeData.legs[0].duration.text;
+    // index.textContent = route.rating;
+
+    let chartStr = "graph" + i + "Wrapper";
+
+    let labels = [];
+
+    console.log(route.elevRespData.length);
+    console.log(route.elevRespData.dataType);
+
+    console.log("Loop");
+    for (let j = 0; j < route.elevRespData.length; j++) {
+      labels.push(j);
+    }
+
+    let data = {
+      labels: labels,
+      datasets: [
+        {
+          label: "Elevation Data",
+          data: route.elevRespData,
+          fill: true,
+          borderColor: "rgb(0, 170, 0)",
+          tension: 0.3,
+          pointRadius: 0,
+        },
+      ],
+    };
+
+    new Chart(chartStr, {
+      type: "line",
+      data: data,
+      options: {
+        scales: {
+          yAxes: [
+            {
+              display: false,
+            },
+          ],
+          xAxes: [
+            {
+              display: false,
+            },
+          ],
+        },
+        legend: {
+          display: false,
+        },
+        maintainAspectRatio: false,
+      },
+    });
+
+    for (let j = 0; j < route.steps.length; j++) {
+      let stepData = route.steps[j];
+      let div = document.createElement("div");
+      let img = document.createElement("img");
+
+      switch (stepData.maneuver) {
+        case "turn-slight-left":
+        case "turn-sharp-left":
+        case "turn-left":
+        case "keep-left":
+          img.src = "./media/directions-icons/turn-left.png";
+          break;
+
+        case "turn-slight-right":
+        case "turn-sharp-right":
+        case "turn-right":
+        case "keep-right":
+          img.src = "./media/directions-icons/turn-right.png";
+          break;
+
+        case "uturn-left":
+          img.src = "./media/directions-icons/u-turn-left.png";
+          break;
+
+        case "uturn-right":
+          img.src = "./media/directions-icons/u-turn-right.png";
+          break;
+
+        case "straight":
+          img.src = "./media/directions-icons/straight.png";
+          break;
+
+        case "ramp-left":
+        case "ramp-right":
+        case "merge":
+          img.src = "./media/directions-icons/merge.png";
+          break;
+
+        case "fork-left":
+        case "fork-right":
+          img.src = "./media/directions-icons/fork.png";
+          break;
+
+        case "ferry":
+        case "ferry-train":
+          img.src = "./media/directions-icons/ferry.png";
+          break;
+
+        case "roundabout-left":
+        case "roundabout-right":
+          img.src = "./media/directions-icons/roundabout.png";
+          break;
+
+        default:
+          img.style.opacity = "0";
       }
-      short.textContent = "Shortest Route";
-      div.appendChild(short);
+
+      let h3 = document.createElement("h3");
+      h3.innerHTML = stepData.html_instructions;
+
+      console.log(stepData.html_instructions);
+
+      div.appendChild(img);
+      div.appendChild(h3);
+      step.appendChild(div);
+
+      styleSteps(div, img, h3);
     }
-    document.getElementById("routeHolder").appendChild(div);
   }
 }
 
-function styleMenuElements(div, h3, h4, h4_2, i) {
-  div.style.height = "62px";
-  div.style.margin = "5%";
-  div.style.marginBottom = "10px";
-  div.style.marginTop = "10px";
-  div.style.width = "90%";
-  div.style.backgroundColor = "rgb(225, 225, 225)";
-  div.style.borderRadius = "5px";
-  div.style.overflow = "hidden";
-  h3.style.position = "relative";
-  h3.style.left = "15px";
-  h3.style.top = "-5px";
-  h3.style.marginBottom = "5px";
-  h3.style.fontSize = "25px";
-  h4.style.fontSize = "20px";
-  h4.style.marginLeft = "15px";
-  h4.style.marginTop = "0px";
-  h4.style.marginBottom = "7px";
-  h4_2.style.fontSize = "20px";
-  h4_2.style.marginLeft = "15px";
-  h4_2.style.marginTop = "0px";
-  h4_2.style.marginBottom = "0px";
-  addRouteListeners(div, h3, h4, h4_2, i);
+function styleSteps(div, img, h3) {
+  div.style.minHeight = "50px";
+  div.style.width = "100%";
+  div.style.display = "grid";
+  div.style.gridTemplateColumns = "50px 1fr";
+
+  img.style.gridColumn = "0";
+  img.style.height = "40px";
+  img.style.width = "40px";
+  img.style.margin = "auto";
+  img.style.padding = "5px";
+
+  h3.style.fontSize = "15px";
+  h3.style.marginLeft = "10px";
+  h3.style.marginRight = "8px";
 }
 
 function changeMenuState() {
@@ -649,19 +742,16 @@ function changeMenuState() {
   }
 }
 
-function addRouteListeners(div, h3, h4, h4_2, i) {
-  div.addEventListener("mouseover", () => {
-    div.style.transition = ".5s";
-    if (routes[i].isShortest && routes[i].isMostFun) {
-      div.style.height = "185px";
-    } else if (routes[i].isShortest || routes[i].isMostFun) {
-      div.style.height = "153px";
-    } else {
-      div.style.height = "130px";
-    }
-  });
-  div.addEventListener("mouseout", () => {
-    div.style.transition = ".5s";
-    div.style.height = "62px";
-  });
+function changeRouteHighlight(i) {
+  console.log(routeArrows);
+  console.log(i);
+  let route = routeDivs[i];
+  let stepWrapper = stepWrappers[i];
+  if (route.classList.contains("routeExpanded")) {
+    route.classList.remove("routeExpanded");
+    stepWrapper.classList.add("hidden");
+  } else {
+    route.classList.add("routeExpanded");
+    stepWrapper.classList.remove("hidden");
+  }
 }
