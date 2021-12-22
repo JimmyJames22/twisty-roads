@@ -14,6 +14,10 @@ let destStr;
 let originId;
 let destId;
 
+let routesDiv;
+let menuDiv;
+let routesHolderDiv;
+
 let routeTaken = true;
 
 let map;
@@ -50,6 +54,9 @@ function init() {
   destIn = document.getElementById("destInput");
   originPredictions = document.getElementsByClassName("originIn");
   destPredictions = document.getElementsByClassName("destIn");
+  routesDiv = document.getElementsByClassName("routes")[0];
+  menuDiv = document.getElementsByClassName("menu")[0];
+  routesHolderDiv = document.getElementsByClassName("routeHolder")[0];
   routeArrows = document.getElementsByClassName("routeArrow");
   routeDivs = document.getElementsByClassName("route");
   stepWrappers = document.getElementsByClassName("stepWrapper");
@@ -74,8 +81,7 @@ function init() {
   });
 
   for (let i = 0; i < originPredictions.length; i++) {
-    pred = originPredictions[i];
-    pred.addEventListener("mousedown", () => {
+    originPredictions[i].addEventListener("mousedown", () => {
       if (i == 0) {
         predictionListeners(true, null, null);
       } else {
@@ -85,8 +91,7 @@ function init() {
   }
 
   for (let i = 0; i < destPredictions.length; i++) {
-    pred = destPredictions[i];
-    pred.addEventListener("mousedown", () => {
+    destPredictions[i].addEventListener("mousedown", () => {
       predictionListeners(false, true, destLog[i]);
     });
   }
@@ -94,6 +99,15 @@ function init() {
   for (let i = 0; i < routeArrows.length; i++) {
     routeArrows[i].addEventListener("mousedown", () => {
       changeRouteHighlight(i);
+    });
+  }
+
+  for (let i = 0; i < routeDivs.length; i++) {
+    routeDivs[i].addEventListener("mouseenter", () => {
+      highlightLine(i);
+    });
+    routeDivs[i].addEventListener("mouseleave", () => {
+      blurLine(i);
     });
   }
 
@@ -359,6 +373,7 @@ class route {
     this.isLongest = false;
     this.isShortest = false;
     this.steps = [];
+    this.lineIndex;
 
     this.analyze(routeData);
   }
@@ -551,6 +566,9 @@ function drawRoutes() {
     if (routes[i].isMostFun) {
       color = "#ff5050";
     }
+
+    routes[i].lineColor = color;
+
     let line = new google.maps.Polyline({
       path: google.maps.geometry.encoding.decodePath(
         routes[i].routeData.overview_polyline.points
@@ -559,12 +577,15 @@ function drawRoutes() {
       strokeColor: color,
       strokeOpacity: 7.0,
       strokeWeight: 4,
+      zIndex: 1,
     });
+
     line.setMap(map);
     lines.push(line);
+
+    routes[i].lineIndex = lines.length - 1;
   }
 
-  let divs = document.getElementsByClassName("route");
   let summaries = document.getElementsByClassName("routeSummary");
   let distances = document.getElementsByClassName("routeDistance");
   let durations = document.getElementsByClassName("routeDuration");
@@ -573,12 +594,14 @@ function drawRoutes() {
 
   for (let i = 0; i < routes.length; i++) {
     let route = routes[i];
-    let div = divs[i];
+    let div = routeDivs[i];
     let summary = summaries[i];
     let distance = distances[i];
     let duration = durations[i];
     // let index = indexes[i];
     let step = steps[i];
+
+    div.classList.remove("hidden");
 
     if (route.isMostFun) {
       div.classList.add("mostFun");
@@ -729,16 +752,15 @@ function styleSteps(div, img, h3) {
 }
 
 function changeMenuState() {
-  if (document.getElementById("routes").classList.contains("routesHidden")) {
-    document.getElementById("routes").classList.remove("routesHidden");
-    document.getElementById("routes").classList.add("routesShown");
-    document.getElementById("menu").classList.remove("routesHidden");
-    document.getElementById("menu").classList.add("routesShown");
+  console.log("changeMenuState()");
+  if (menuDiv.classList.contains("menuHidden")) {
+    routesDiv.classList.remove("routesHidden");
+    menuDiv.classList.remove("menuHidden");
+    routesHolderDiv.classList.remove("holderHidden");
   } else {
-    document.getElementById("routes").classList.add("routesHidden");
-    document.getElementById("routes").classList.remove("routesShown");
-    document.getElementById("menu").classList.add("routesHidden");
-    document.getElementById("menu").classList.remove("routesShown");
+    routesDiv.classList.add("routesHidden");
+    menuDiv.classList.add("menuHidden");
+    routesHolderDiv.classList.add("holderHidden");
   }
 }
 
@@ -749,9 +771,22 @@ function changeRouteHighlight(i) {
   let stepWrapper = stepWrappers[i];
   if (route.classList.contains("routeExpanded")) {
     route.classList.remove("routeExpanded");
-    stepWrapper.classList.add("hidden");
+    stepWrapper.classList.add("stepsHidden");
   } else {
     route.classList.add("routeExpanded");
-    stepWrapper.classList.remove("hidden");
+    stepWrapper.classList.remove("stepsHidden");
+  }
+}
+
+function highlightLine(i) {
+  if (routes[i]) {
+    console.log(i);
+    lines[routes[i].lineIndex].setOptions({ strokeWeight: 7, zIndex: 2 });
+  }
+}
+
+function blurLine(i) {
+  if (routes[i]) {
+    lines[routes[i].lineIndex].setOptions({ strokeWeight: 4, zIndex: 1 });
   }
 }

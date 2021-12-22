@@ -65,10 +65,10 @@
         <button class="routingIn" id="nav" onclick="takeRoutingInput()" disabled>Take me!</button>
       </div>
     </div>
-    <div id="routes" class="routesShown">
-      <div id="menu" class="routesShown">
-        <div id="routeHolder">
-          <div class="route">
+    <div class="routes">
+      <div class="menu">
+        <div class="routeHolder">
+          <div class="route hidden">
             <div class="quickRouteInfo">
               <h1 class="routeSummary ellipsis"></h1>
               <span class="routeData">
@@ -83,13 +83,13 @@
                 <canvas id="graph0Wrapper"></canvas>
               </div>
             </div>
-            <div class="stepWrapper hidden">
+            <div class="stepWrapper stepsHidden">
               <h3>Route Steps</h3>
               <div class="steps"></div>
             </div>
             <img class="routeArrow" src="./media/black-arrow-png-41944.png" draggable="false">
           </div>
-          <div class="route">
+          <div class="route hidden">
             <div class="quickRouteInfo">
               <h1 class="routeSummary ellipsis"></h1>
               <span class="routeData">
@@ -104,13 +104,13 @@
                 <canvas id="graph1Wrapper"></canvas>
               </div>
             </div>
-            <div class="stepWrapper hidden">
+            <div class="stepWrapper stepsHidden">
               <h3>Route Steps</h3>
               <div class="steps"></div>
             </div>
             <img class="routeArrow" src="./media/black-arrow-png-41944.png" draggable="false">
           </div>
-          <div class="route">
+          <div class="route hidden">
             <div class="quickRouteInfo">
               <h1 class="routeSummary ellipsis"></h1>
               <span class="routeData">
@@ -125,7 +125,7 @@
                 <canvas id="graph2Wrapper"></canvas>
               </div>
             </div>
-            <div class="stepWrapper hidden">
+            <div class="stepWrapper stepsHidden">
               <h3>Route Steps</h3>
               <div class="steps"></div>
             </div>
@@ -133,9 +133,7 @@
           </div>
         </div>
         <div id="menuHider">
-          <h3 id="Route">Route</h3>
           <img  src="./media/routes.png" onclick="changeMenuState()" draggable="false">
-          <h3 id="Menu">Menu</h3>
         </div>
       </div>
       <div id="map"></div>
