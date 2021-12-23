@@ -52,8 +52,8 @@
         <button class="routingIn" id="nav" onclick="takeRoutingInput()" disabled>Take me!</button>
       </div>
     </div>
-    <div id="routes" class="routesHidden">
-      <div id="menu" class="routesHidden">
+    <div id="routes" class="routesShown">
+      <div id="menu" class="routesShown">
         <div id="routeHolder"></div>
       </div>
       <div id="menuHider">

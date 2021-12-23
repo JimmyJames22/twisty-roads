@@ -28,7 +28,7 @@ let loadingPhrases = [
 ];
 
 let key = "AIzaSyDrZ-lEzCYDJRXJc6RxAjcyxK_JSfQpEIw";
-let header = "http://localhost:8080/";
+let header = "https://twistyroads.tk/cors/";
 
 let elevData = [];
 
@@ -82,6 +82,7 @@ function getJSON(url, callback) {
     type: "GET",
     dataType: "json",
     url: url,
+    headers: {'x-requested-with': 'XMLHttpRequest'},
   })
     .done(function (data) {
       callback(null, data);
@@ -122,11 +123,10 @@ function centerVert(parent, child) {
 
 function autoCompleteOrig() {
   let input = originIn.value;
-  console.log(input);
-  let url = `${header}https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${input}&key=${key}`;
+  let url = `${header}maps.googleapis.com/maps/api/place/autocomplete/json?input=${input}&key=${key}`
   getJSON(url, (err, data) => {
     if (err !== null) {
-      alert(`Something went wrong ${err}`);
+      console.log(`Something went wrong ${err}`);
     } else {
       originLog = [];
       let counter = 0;
@@ -153,11 +153,11 @@ function autoCompleteOrig() {
 
 function autoCompleteDest() {
   let input = destIn.value;
-  console.log(input);
-  let url = `${header}https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${input}&key=${key}`;
+  let url = `${header}maps.googleapis.com/maps/api/place/autocomplete/json?input=${input}&key=${key}`;
+  console.log(url);
   getJSON(url, (err, data) => {
     if (err !== null) {
-      alert(`Something went wrong ${err}`);
+      console.log(`Something went wrong ${err}`);
     } else {
       destLog = [];
       for (let j = 0; j < data.predictions.length; j++) {
@@ -325,7 +325,7 @@ function takeRoutingInput() {
     "rgba(37, 173, 32, 0.767)";
   document.getElementById("nav").disabled = true;
   document.getElementById("loading").style.opacity = "1";
-  url = `${header}https://maps.googleapis.com/maps/api/directions/json?origin=${originId}&destination=${destId}&alternatives=true&avoid=tolls|highways|ferries&key=${key}`;
+  url = `${header}maps.googleapis.com/maps/api/directions/json?origin=${originId}&destination=${destId}&alternatives=true&avoid=tolls|highways|ferries&key=${key}`;
   getJSON(url, (err, data) => {
     console.log(data);
     for (let i = 0; i < data.routes.length; i++) {
@@ -468,11 +468,11 @@ class route {
     let elevProm = new Promise(function (resolve, reject) {
       for (let x = 0; x < elevData.length; x++) {
         console.log(elevData[x]);
-        let url = `${header}https://maps.googleapis.com/maps/api/elevation/json?locations=${elevData[x]}&key=${key}`;
+        let url = `${header}maps.googleapis.com/maps/api/elevation/json?locations=${elevData[x]}&key=${key}`;
         console.log("url " + url);
         getJSON(url, (err, data) => {
           if (err) {
-            reject(err);
+            console.log(err);
           }
           console.log("HIIIIIIIIIIIII");
           console.log(data);
