@@ -591,6 +591,8 @@ function drawRoutes() {
   let durations = document.getElementsByClassName("routeDuration");
   // let indexes = document.getElementsByClassName("routeIndex");
   let steps = document.getElementsByClassName("steps");
+  let mostFunTexts = document.getElementsByClassName("mostFunText");
+  let shortestTexts = document.getElementsByClassName("shortestText");
 
   for (let i = 0; i < routes.length; i++) {
     let route = routes[i];
@@ -605,9 +607,15 @@ function drawRoutes() {
 
     if (route.isMostFun) {
       div.classList.add("mostFun");
+      mostFunTexts[i].style.opacity = "1";
+      mostFunTexts[i].style.width = "auto";
+      mostFunTexts[i].style.left = "5px";
     }
     if (route.isShortest) {
       div.classList.add("shortest");
+      shortestTexts[i].style.opacity = "1";
+      shortestTexts[i].style.width = "auto";
+      shortestTexts[i].style.left = "5px";
     }
     summary.textContent = route.routeData.summary;
     distance.textContent = route.routeData.legs[0].distance.text;
