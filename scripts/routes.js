@@ -39,7 +39,7 @@ let loadingPhrases = [
 ];
 
 let key = "AIzaSyDrZ-lEzCYDJRXJc6RxAjcyxK_JSfQpEIw";
-let header = "http://localhost:8080/";
+let header = "https://twistyroads.tk/cors/";
 
 let elevData = [];
 
@@ -333,6 +333,11 @@ function takeRoutingInput() {
   url = `${header}https://maps.googleapis.com/maps/api/directions/json?origin=${originId}&destination=${destId}&alternatives=true&avoid=tolls|highways|ferries&key=${key}`;
   getJSON(url, (err, data) => {
     console.log(data);
+    if (routeTaken) {
+      clearMap();
+      clearMenu();
+      routes = [];
+    }
     for (let i = 0; i < data.routes.length; i++) {
       routes.push(new route(data.routes[i]));
     }
@@ -347,6 +352,44 @@ function takeRoutingInput() {
   });
 }
 
+function clearMap() {
+  for (i = 0; i < lines.length; i++) {
+    lines[i].setMap(null);
+  }
+}
+
+function clearMenu() {
+  let summaries = document.getElementsByClassName("routeSummary");
+  let distances = document.getElementsByClassName("routeDistance");
+  let graphs = document.getElementsByClassName("elevGraph");
+  let steps = document.getElementsByClassName("steps");
+  let mostFunTexts = document.getElementsByClassName("mostFunText");
+  let shortestTexts = document.getElementsByClassName("shortestText");
+
+  for (i = 0; i < routeDivs.length; i++) {
+    div = routeDivs[i];
+    div.classList.add("hidden");
+    div.classList.remove("mostFun");
+    div.classList.remove("shortest");
+
+    mostFunTexts[i].style.opacity = "0";
+    shortestTexts[i].style.opacity = "0";
+
+    let step = steps[i];
+    while (step.firstChild) {
+      step.removeChild(step.firstChild);
+    }
+
+    let graph = graphs[i];
+    while (graph.firstChild) {
+      graph.removeChild(graph.firstChild);
+    }
+    let canvas = document.createElement("canvas");
+    canvas.id = `graph${i}Wrapper`;
+    graph.appendChild(canvas);
+  }
+}
+
 function initMap() {
   map = new google.maps.Map(document.getElementById("map"), {
     center: { lat: 42.2495, lng: -71.0662 },
@@ -359,7 +402,7 @@ class route {
   constructor(routeData) {
     this.routeData = routeData;
     this.elevNum = 0;
-    this.distNum;
+    this.distNum = 0;
     this.elevCoords = [];
     this.path;
     this.rating;
@@ -441,9 +484,10 @@ class route {
     this.aveDist = this.distSum / this.distNum;
     console.log("elevSum " + this.elevSum);
     console.log("distSum " + this.distSum);
-    console.log("num " + this.elevNum);
+    console.log("distNum " + this.distNum);
+    console.log("elevNum " + this.elevNum);
     console.log("aveElev " + this.aveElev);
-    this.rating = this.aveDist + this.aveElev / 2;
+    this.rating = (this.aveDist + this.aveElev) / 2;
 
     orderRoutes();
     drawRoutes();
@@ -511,9 +555,9 @@ class route {
 
 function orderRoutes() {
   let shortestDistance = 0;
-  let shortestDistanceIndex;
+  let shortestDistanceIndex = 0;
   let longestDistance = 0;
-  let longestDistanceIndex;
+  let longestDistanceIndex = 0;
   let rating = 0;
   let ratingIndex;
   for (let i = 0; i < routes.length; i++) {
@@ -550,7 +594,6 @@ function orderRoutes() {
 }
 
 function drawRoutes() {
-  console.log(drawRoutes);
   let bounds = new google.maps.LatLngBounds();
   bounds.extend(routes[0].routeData.legs[0].start_location);
   bounds.extend(
@@ -591,6 +634,8 @@ function drawRoutes() {
   let durations = document.getElementsByClassName("routeDuration");
   // let indexes = document.getElementsByClassName("routeIndex");
   let steps = document.getElementsByClassName("steps");
+  let mostFunTexts = document.getElementsByClassName("mostFunText");
+  let shortestTexts = document.getElementsByClassName("shortestText");
 
   for (let i = 0; i < routes.length; i++) {
     let route = routes[i];
@@ -605,23 +650,24 @@ function drawRoutes() {
 
     if (route.isMostFun) {
       div.classList.add("mostFun");
+      mostFunTexts[i].style.opacity = "1";
+      mostFunTexts[i].style.width = "auto";
+      mostFunTexts[i].style.left = "5px";
     }
     if (route.isShortest) {
       div.classList.add("shortest");
+      shortestTexts[i].style.opacity = "1";
+      shortestTexts[i].style.width = "auto";
+      shortestTexts[i].style.left = "5px";
     }
     summary.textContent = route.routeData.summary;
     distance.textContent = route.routeData.legs[0].distance.text;
     duration.textContent = route.routeData.legs[0].duration.text;
-    // index.textContent = route.rating;
 
     let chartStr = "graph" + i + "Wrapper";
 
     let labels = [];
 
-    console.log(route.elevRespData.length);
-    console.log(route.elevRespData.dataType);
-
-    console.log("Loop");
     for (let j = 0; j < route.elevRespData.length; j++) {
       labels.push(j);
     }
@@ -723,14 +769,16 @@ function drawRoutes() {
       let h3 = document.createElement("h3");
       h3.innerHTML = stepData.html_instructions;
 
-      console.log(stepData.html_instructions);
-
       div.appendChild(img);
       div.appendChild(h3);
       step.appendChild(div);
 
       styleSteps(div, img, h3);
     }
+    console.log("Route " + i);
+    console.log("rating: " + route.rating);
+    console.log("dist: " + route.aveDist);
+    console.log("elev: " + route.aveElev);
   }
 }
 

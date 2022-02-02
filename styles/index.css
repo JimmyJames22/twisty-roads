@@ -328,7 +328,7 @@ body.done {
 
 .ellipsis {
   white-space: nowrap;
-  overflow: hidden;
+  overflow-x: hidden;
   text-overflow: ellipsis;
 }
 
@@ -458,7 +458,7 @@ body.done {
 
 .quickRouteInfo {
   grid-row: 1;
-  width: 100%;
+  width: 310px;
 }
 
 .routeSummary {
@@ -466,6 +466,23 @@ body.done {
   height: 30px;
   width: 100%;
   margin-bottom: 5px;
+  overflow-x: hidden;
+}
+
+.mostFunText {
+  position: relative;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  color: red;
+}
+
+.shortestText {
+  position: relative;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  color: green;
 }
 
 .routeData {

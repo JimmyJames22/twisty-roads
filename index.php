@@ -75,6 +75,8 @@
                 <h3 class="routeDistance"></h3>
                 <h3> | </h3>
                 <h3 class="routeDuration"></h3>
+                <h3 class="mostFunText">Most Fun</h3>
+                <h3 class="shortestText">Shortest</h3>
               </span>
             </div>
             <div class="elevWrapper">
@@ -96,6 +98,8 @@
                 <h3 class="routeDistance"></h3>
                 <h3> | </h3>
                 <h3 class="routeDuration"></h3>
+                <h3 class="mostFunText">Most Fun</h3>
+                <h3 class="shortestText">Shortest</h3>
               </span>
             </div>
             <div class="elevWrapper">
@@ -117,6 +121,8 @@
                 <h3 class="routeDistance"></h3>
                 <h3> | </h3>
                 <h3 class="routeDuration"></h3>
+                <h3 class="mostFunText">Most Fun</h3>
+                <h3 class="shortestText">Shortest</h3>
               </span>
             </div>
             <div class="elevWrapper">
