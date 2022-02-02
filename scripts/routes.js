@@ -39,7 +39,7 @@ let loadingPhrases = [
 ];
 
 let key = "AIzaSyDrZ-lEzCYDJRXJc6RxAjcyxK_JSfQpEIw";
-let header = "http://localhost:8080/";
+let header = "https://twistyroads.tk/cors/";
 
 let elevData = [];
 
@@ -555,9 +555,9 @@ class route {
 
 function orderRoutes() {
   let shortestDistance = 0;
-  let shortestDistanceIndex;
+  let shortestDistanceIndex = 0;
   let longestDistance = 0;
-  let longestDistanceIndex;
+  let longestDistanceIndex = 0;
   let rating = 0;
   let ratingIndex;
   for (let i = 0; i < routes.length; i++) {
